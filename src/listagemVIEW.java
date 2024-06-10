@@ -1,12 +1,12 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -133,15 +133,32 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
+
+        // Verifica se o campo de ID do produto está vazio
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira o ID do produto a ser vendido.");
+            return; 
+        }
+
+        int idProduto;
+        try {
+            
+            idProduto = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "O ID do produto deve ser um número válido.");
+            return; 
+        }
+
         
         ProdutosDAO produtosdao = new ProdutosDAO();
+        produtosdao.venderProduto(idProduto);
+
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        listaProdutos.setModel(listarProdutos());
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnconsultarvendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconsultarvendasActionPerformed
-        listaProdutos.setModel(listarProdutos());
+
     }//GEN-LAST:event_btnconsultarvendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -196,29 +213,25 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-    private DefaultTableModel listarProdutos(){
-            
-            String[] colunas = {"id","Nome", "Valor", "Status",};
-            
-            DefaultTableModel tabela = new DefaultTableModel(colunas, 0);
-            
-            ProdutosDAO produtosdao = new ProdutosDAO();
-            
-            java.util.List<ProdutosDTO> listagem = produtosdao.listarTodos();
-                      
-            
-            
-            for(int i = 0; i < listagem.size(); i++){
-                tabela.addRow(new Object[]{
-                    listagem.get(i).getId(),
-                    listagem.get(i).getNome(),
-                    listagem.get(i).getValor(),
-                    listagem.get(i).getStatus()
-                });
-            }return tabela;
+    private DefaultTableModel listarProdutos() {
+
+        String[] colunas = {"id", "Nome", "Valor", "Status",};
+
+        DefaultTableModel tabela = new DefaultTableModel(colunas, 0);
+
+        ProdutosDAO produtosdao = new ProdutosDAO();
+
+        java.util.List<ProdutosDTO> listagem = produtosdao.listarTodos();
+
+        for (int i = 0; i < listagem.size(); i++) {
+            tabela.addRow(new Object[]{
+                listagem.get(i).getId(),
+                listagem.get(i).getNome(),
+                listagem.get(i).getValor(),
+                listagem.get(i).getStatus()
+            });
+        }
+        return tabela;
     }
-        
-        
-    
-    
+
 }
