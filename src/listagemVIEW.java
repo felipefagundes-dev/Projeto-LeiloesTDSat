@@ -137,28 +137,27 @@ public class listagemVIEW extends javax.swing.JFrame {
         // Verifica se o campo de ID do produto está vazio
         if (id.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, insira o ID do produto a ser vendido.");
-            return; 
+            return;
         }
 
         int idProduto;
         try {
-            
+
             idProduto = Integer.parseInt(id);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "O ID do produto deve ser um número válido.");
-            return; 
+            return;
         }
 
-        
         ProdutosDAO produtosdao = new ProdutosDAO();
         produtosdao.venderProduto(idProduto);
 
-        
         listaProdutos.setModel(listarProdutos());
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnconsultarvendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconsultarvendasActionPerformed
-
+        vendasVIEW vendidos = new vendasVIEW();
+        vendidos.setVisible(true);
     }//GEN-LAST:event_btnconsultarvendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -214,6 +213,27 @@ public class listagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private DefaultTableModel listarProdutos() {
+
+        String[] colunas = {"id", "Nome", "Valor", "Status",};
+
+        DefaultTableModel tabela = new DefaultTableModel(colunas, 0);
+
+        ProdutosDAO produtosdao = new ProdutosDAO();
+
+        java.util.List<ProdutosDTO> listagem = produtosdao.listarTodos();
+
+        for (int i = 0; i < listagem.size(); i++) {
+            tabela.addRow(new Object[]{
+                listagem.get(i).getId(),
+                listagem.get(i).getNome(),
+                listagem.get(i).getValor(),
+                listagem.get(i).getStatus()
+            });
+        }
+        return tabela;
+    }
+
+    private DefaultTableModel listarProdutosVendidos() {
 
         String[] colunas = {"id", "Nome", "Valor", "Status",};
 
