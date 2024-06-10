@@ -21,8 +21,12 @@ public class conectaDAO {
         Connection conn = null;
         
         try {
+            String url = "jdbc:mysql://localhost/LeiloesTDSat?useSSL=false&allowPublicKeyRetrieval=true";
+            String user = "root";
+            String password = "felipe1670";
+            
         
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11?user=root&password=");
+            conn = DriverManager.getConnection(url, user, password);
             
         } catch (SQLException erro){
             JOptionPane.showMessageDialog(null, "Erro ConectaDAO" + erro.getMessage());
